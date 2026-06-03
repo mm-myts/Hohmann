@@ -1,15 +1,19 @@
 import scipy.constants as const
 from math import sqrt
 
+from plot import *
+
 massPB = 5.97216787e24
 
 # PRIMARY BODY
 
-initial_radius = float(input("PB orbit radius: "))
+initial_altitude = float(input("Starting altitude (km): "))
+initial_radius = initial_altitude*1000 + R_EARTH*1000
 
 # DESTINATION BODY
 
-final_radius = float(input("DB orbit radius: "))
+final_altitude = float(input("Final altitude (km): "))
+final_radius = final_altitude*1000 + R_EARTH*1000
 
 # HOHMANN TRANSFER TIME
 
@@ -54,3 +58,34 @@ dv2 = sqrt(2*const.G*massPB*(1/final_radius-1/(initial_radius+final_radius))) - 
 print("Delta-v at burn 1:", round(dv1, 2))
 
 print("Delta-v at burn 2:", round(dv2, 2))
+
+# PLOTTING THE SPACE
+
+
+# Setup 
+fig, ax = plt.subplots(figsize=(8, 8))
+plt.style.use('dark_background')
+
+# Earth
+earth = plt.Circle((0, 0), R_EARTH, color='deepskyblue', label='Earth')
+ax.add_patch(earth)
+
+# Orbits
+r1 = initial_radius / 1000 
+r2 = final_radius / 1000 
+
+plot_orbit(r1, 'lime', f'Initial Orbit ({initial_altitude}km)')
+plot_orbit(r2, 'red', f'Target Orbit ({final_altitude}km)')
+plot_transfer(r1, r2)
+
+# Burn markers
+plt.plot(r1, 0, 'o', color='lime', markersize=10, label='Burn 1')
+plt.plot(-r2, 0, 'o', color='red', markersize=10, label='Burn 2')
+
+ax.set_aspect('equal')
+ax.legend(loc='upper right')
+plt.title('Hohmann Transfer: LEO → GEO')
+plt.tight_layout()
+plt.show()
+
+
