@@ -1,5 +1,4 @@
 import scipy.constants as const
-from math import sqrt
 
 from plot import *
 from v_graph import *
@@ -19,7 +18,7 @@ final_radius = final_altitude*1000 + R_EARTH*1000           # m
 
 # HOHMANN TRANSFER TIME
 
-HTT = sqrt(((4*const.pi**2)/(const.G * massPB))*((initial_radius+final_radius)/2)**3)/(2)
+HTT = np.sqrt(((4*const.pi**2)/(const.G * massPB))*((initial_radius+final_radius)/2)**3)/(2)
 
 
 # PLOTTING THE SPACE
@@ -128,10 +127,6 @@ ax[0].legend(handles=legend_elements, loc='upper right',
           framealpha=1.0)
 
 
-
-
-# DELTA V GRAPH
-
 # DELTA V GRAPH  — use km throughout to match v_total / hohmann_v
 
 MU_KM = 398600.4418   # km³/s²
@@ -180,6 +175,7 @@ ax[1].scatter([t0_min, tT_min], [vTp, v2], color=c_burn, s=40, zorder=5)
 
 dv1 = vTp - v1
 dv2 = v2  - vTa
+
 ax[1].text(t0_min + (tT_min - t0_min)*0.013, (v1 + vTp)/2,
         f'Δv₁ = +{dv1:.3f} km/s', color=c_burn, fontsize=9.5, va='center')
 ax[1].text(tT_min + (tT_min - t0_min)*0.013, (vTa + v2)/2,
